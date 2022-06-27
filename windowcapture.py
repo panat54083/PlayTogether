@@ -9,21 +9,19 @@ class WindowCapture:
 
     def __init__(self, window_name = None):
 
-        
-        if window_name == None:    
-            self.hwnd = None
-            self.w = 1920
-            self.h = 1680
+        # if there is no window name given.
+        if window_name is None:    
+            self.hwnd = win32gui.GetDesktopWindow()
 
         else:
             self.hwnd = win32gui.FindWindow(None, window_name)  
             if not self.hwnd:
                 raise Exception('Window not found:{}'.format(window_name))
 
-            # get the window size
-            window_rect = win32gui.GetWindowRect(self.hwnd)
-            self.w = window_rect[2] - window_rect[0]
-            self.h = window_rect[3] - window_rect[1]
+        # get the window size
+        window_rect = win32gui.GetWindowRect(self.hwnd)
+        self.w = window_rect[2] - window_rect[0]
+        self.h = window_rect[3] - window_rect[1]
 
         self.bmpfilenamename = "debug.bmp" #set this
 
@@ -58,7 +56,8 @@ class WindowCapture:
 
         return img
 
-    def list_window_name(self):
+    @staticmethod
+    def list_window_name():
         def winEnumHandler(hwnd, ctx):
             if win32gui.IsWindowVisible(hwnd):
                 print(hex(hwnd), win32gui.GetWindowText(hwnd))
@@ -69,6 +68,5 @@ class WindowCapture:
 
 if __name__ == "__main__":
     
-    a = WindowCapture()
-    a.list_window_name()
+    WindowCapture.list_window_name()
 

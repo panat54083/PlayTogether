@@ -6,7 +6,7 @@ import os
 import time
 from windowcapture import WindowCapture
 
-window_name = None
+window_name = "ApowerMirror Livestream"
 # window_name = None
 wincap = WindowCapture(window_name)
 
