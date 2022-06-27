@@ -6,7 +6,8 @@ import os
 import time
 from windowcapture import WindowCapture
 
-window_name = "LDPlayer"
+window_name = None
+# window_name = None
 wincap = WindowCapture(window_name)
 
 
