@@ -4,6 +4,7 @@ from cv2 import line
 from cv2 import rectangle
 import numpy as np
 
+
 def findClickPosition(screen_img_path, taget_img_path, threshold = 0.9, debug_mode = None):
     
     # imread Methods
@@ -33,14 +34,13 @@ def findClickPosition(screen_img_path, taget_img_path, threshold = 0.9, debug_mo
         rectangles.append(rect)
         rectangles.append(rect)
 
-    print(rectangles)
+    # print(rectangles)
 
     rectangles, weights = cv.groupRectangles(rectangles, 1, 0.5)
-    print(rectangles)
+    # print(rectangles)
     points = []
     if len(rectangles):
         print('Found..')
-
 
         line_color = (0, 255, 0)
         line_type = cv.LINE_4
@@ -54,7 +54,7 @@ def findClickPosition(screen_img_path, taget_img_path, threshold = 0.9, debug_mo
             # save points
             points.append((center_x, center_y))
 
-            if debug_mode == "rectangle":
+            if debug_mode == "rectangles":
                 # determine the box positions
                 top_left = (x, y)
                 bottom_right = (x + w, y + h)
@@ -62,7 +62,7 @@ def findClickPosition(screen_img_path, taget_img_path, threshold = 0.9, debug_mo
                 cv.rectangle(screen_img, top_left, bottom_right, 
                             line_color, line_type)
             
-            elif debug_mode == "point":
+            elif debug_mode == "points":
                 cv.drawMarker(screen_img, (center_x, center_y), marker_color, marker_type)
 
         if debug_mode:
@@ -72,5 +72,8 @@ def findClickPosition(screen_img_path, taget_img_path, threshold = 0.9, debug_mo
     else:
         print("Not found..")
 
+    return points
 
-findClickPosition('picture/test2.PNG', 'picture/exclamation point2.PNG', 0.9 , "rectangle")
+points = findClickPosition('picture/test2.PNG', 'picture/getting_button.PNG',
+                             threshold = 0.9, debug_mode='rectangles')
+print(points)
