@@ -1,4 +1,5 @@
 #ref = https://youtu.be/WymCpVUPWQ4
+from cv2 import rectangle
 import numpy as np
 import pyautogui as pg
 import cv2 as cv
@@ -7,11 +8,12 @@ import time
 from windowcapture import WindowCapture
 from vision import Vision
 
-window_name = "ApowerMirror Livestream"
-# window_name = None
+# window_name = "ApowerMirror Livestream"
+window_name = None
 wincap = WindowCapture(window_name)
 
-vision_exclamation = Vision('picture/exclamation point3.PNG')
+vision_exclamation = Vision('picture/exclamation point3.jpg')
+# vision_exclamation = Vision('picture/IMG_1545.jpg')    
 
 loop_time = time.time()
 while(True):
@@ -22,9 +24,15 @@ while(True):
     # screenshot = np.array(screenshot)
     # # Convert RGB to BGR 
 
-    screenshot = cv.cvtColor(screenshot, cv.COLOR_RGB2GRAY)
+    # screenshot = cv.cvtColor(screenshot, cv.COLOR_RGBA2GRAY)
 
-    points = vision_exclamation.find(screenshot, 0.7, "rectangles")
+    # do object detection
+    rectangles = vision_exclamation.find(screenshot, 0.7)
+
+    output_img = vision_exclamation.draw_rectangles(screenshot, rectangles)
+
+    # display the processed image
+    cv.imshow('Computer Vision', output_img)
     # cv.imshow('Computer Vision', screenshot)
 
     print("FPS {}".format(1 / (time.time() - loop_time)))

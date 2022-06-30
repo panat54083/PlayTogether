@@ -67,6 +67,5 @@ class WindowCapture:
         return (pos[0], pos[1])
 
 if __name__ == "__main__":
-    
-    WindowCapture.list_window_name()
+    a = WindowCapture()
 
