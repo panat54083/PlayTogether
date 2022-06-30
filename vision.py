@@ -5,13 +5,12 @@ from cv2 import rectangle
 import numpy as np
 
 
-def findClickPosition(screen_img_path, taget_img_path, threshold = 0.9, debug_mode = None):
+def findClickPosition(taget_img_path, screen_img, threshold = 0.9, debug_mode = None):
     
     # imread Methods
     # https://docs.opencv.org/4.2.0/d4/da8/group__imgcodecs.html#ga61d9b0126a3e57d9277ac48327799c80
-    imread_Methods = cv.IMREAD_GRAYSCALE
-    screen_img = cv.imread(screen_img_path, imread_Methods)
-    target_img = cv.imread(taget_img_path, imread_Methods)
+    # screen_img = cv.imread(screen_img, cv.IMREAD_GRAYSCALE)
+    target_img = cv.imread(taget_img_path, cv.IMREAD_GRAYSCALE)
 
     tg_w = target_img.shape[1]
     tg_h = target_img.shape[0]
@@ -65,15 +64,15 @@ def findClickPosition(screen_img_path, taget_img_path, threshold = 0.9, debug_mo
             elif debug_mode == "points":
                 cv.drawMarker(screen_img, (center_x, center_y), marker_color, marker_type)
 
-        if debug_mode:
-            cv.imshow('Matches', screen_img)
-            cv.waitKey()
+    if debug_mode:
+        cv.imshow('Matches', screen_img)
+        # cv.waitKey()
 
-    else:
-        print("Not found..")
+    # else:
+    #     print("Not found..")
 
     return points
 
-points = findClickPosition('picture/test2.PNG', 'picture/getting_button.PNG',
-                             threshold = 0.9, debug_mode='rectangles')
-print(points)
+# points = findClickPosition('picture/exclamation point2.PNG', 'picture/test2.PNG',
+#                              threshold = 0.9, debug_mode='rectangles')
+# print(points)

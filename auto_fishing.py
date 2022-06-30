@@ -5,6 +5,7 @@ import cv2 as cv
 import os
 import time
 from windowcapture import WindowCapture
+from vision import findClickPosition
 
 window_name = "ApowerMirror Livestream"
 # window_name = None
@@ -20,13 +21,15 @@ while(True):
     # # we need to convert screenshot format to input that open cv understand.
     # screenshot = np.array(screenshot)
     # # Convert RGB to BGR 
-    # screenshot = cv.cvtColor(screenshot, cv.COLOR_RGB2BGR)
-  
-    cv.imshow('Computer Vision', screenshot)
+
+    taget_path = 'picture/exclamation point3.PNG'
+    screenshot = cv.cvtColor(screenshot, cv.COLOR_RGB2GRAY)
+
+    findClickPosition(taget_path, screenshot, 0.7, "rectangles")
+    # cv.imshow('Computer Vision', screenshot)
 
     print("FPS {}".format(1 / (time.time() - loop_time)))
     loop_time = time.time()
-
 
     # press "q" with the output windows focused to exist.
     
