@@ -5,13 +5,13 @@ import cv2 as cv
 import os
 import time
 from windowcapture import WindowCapture
-from vision import findClickPosition
+from vision import Vision
 
 window_name = "ApowerMirror Livestream"
 # window_name = None
 wincap = WindowCapture(window_name)
 
-
+vision_exclamation = Vision('picture/exclamation point3.PNG')
 
 loop_time = time.time()
 while(True):
@@ -22,10 +22,9 @@ while(True):
     # screenshot = np.array(screenshot)
     # # Convert RGB to BGR 
 
-    taget_path = 'picture/exclamation point3.PNG'
     screenshot = cv.cvtColor(screenshot, cv.COLOR_RGB2GRAY)
 
-    findClickPosition(taget_path, screenshot, 0.7, "rectangles")
+    points = vision_exclamation.find(screenshot, 0.7, "rectangles")
     # cv.imshow('Computer Vision', screenshot)
 
     print("FPS {}".format(1 / (time.time() - loop_time)))
