@@ -14,7 +14,7 @@ wincap = WindowCapture(window_name)
 
 vision_exclamation = Vision('picture/exclamation point3.jpg')
 # vision_exclamation = Vision('picture/IMG_1545.jpg')    
-
+vision_exclamation.init_control_gui()
 loop_time = time.time()
 while(True):
 
@@ -23,13 +23,14 @@ while(True):
     # # we need to convert screenshot format to input that open cv understand.
     # screenshot = np.array(screenshot)
     # # Convert RGB to BGR 
-
+    # pre-process the image
+    output_img = vision_exclamation.apply_hsv_filter(screenshot)
     # screenshot = cv.cvtColor(screenshot, cv.COLOR_RGBA2GRAY)
 
     # do object detection
-    rectangles = vision_exclamation.find(screenshot, 0.7)
+    # rectangles = vision_exclamation.find(screenshot, 0.7)
 
-    output_img = vision_exclamation.draw_rectangles(screenshot, rectangles)
+    # output_img = vision_exclamation.draw_rectangles(screenshot, rectangles)
 
     # display the processed image
     cv.imshow('Computer Vision', output_img)
