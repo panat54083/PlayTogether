@@ -28,7 +28,7 @@ class Vision:
         self.method = method
 
 
-    def find(self, screen_img, threshold = 0.5):
+    def find(self, screen_img, threshold = 0.5, max_result=10):
         
         result = cv.matchTemplate(screen_img, self.target_img, self.method)
         # print(result)
@@ -38,6 +38,9 @@ class Vision:
         # list[start:stop:step] *list == unpack lists
         locations = list(zip(*locations[::-1]))
         # print(locations)
+        
+        if not locations:
+            return np.array([], dtype=np.int32).reshape(0, 4)
 
         # create the list of [x, y, w, h] rectangles
         rectangles = []
@@ -50,7 +53,9 @@ class Vision:
         # print(rectangles)
         rectangles, weights = cv.groupRectangles(rectangles, 1, 0.5)
         # print(rectangles)
-
+        if len(rectangles) > max_result:
+            print('Warning: too many results, raise the threshold.')
+            rectangles = rectangles[:max_result]
         return rectangles
         
     def get_click_points(self, rectangles):

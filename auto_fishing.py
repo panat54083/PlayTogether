@@ -7,12 +7,12 @@ import os
 import time
 from windowcapture import WindowCapture
 from vision import Vision
-
-# window_name = "ApowerMirror Livestream"
-window_name = None
+from hsvfilter import HsvFilter
+window_name = "ApowerMirror Livestream"
+# window_name = None
 wincap = WindowCapture(window_name)
 
-vision_exclamation = Vision('picture/exclamation point3.jpg')
+vision_exclamation = Vision('picture/process_egg.jpg')
 # vision_exclamation = Vision('picture/IMG_1545.jpg')    
 vision_exclamation.init_control_gui()
 loop_time = time.time()
@@ -24,13 +24,13 @@ while(True):
     # screenshot = np.array(screenshot)
     # # Convert RGB to BGR 
     # pre-process the image
-    output_img = vision_exclamation.apply_hsv_filter(screenshot)
+    hsvfilter = HsvFilter(18, 0, 255, 58, 46, 255, 0, 0, 0, 0)
+    pre_process_img = vision_exclamation.apply_hsv_filter(screenshot, hsvfilter)
     # screenshot = cv.cvtColor(screenshot, cv.COLOR_RGBA2GRAY)
-
     # do object detection
-    # rectangles = vision_exclamation.find(screenshot, 0.7)
+    rectangles = vision_exclamation.find(pre_process_img, 0.45)
 
-    # output_img = vision_exclamation.draw_rectangles(screenshot, rectangles)
+    output_img = vision_exclamation.draw_rectangles(screenshot, rectangles)
 
     # display the processed image
     cv.imshow('Computer Vision', output_img)
