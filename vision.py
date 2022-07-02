@@ -199,7 +199,13 @@ class Vision:
         eroded_image = cv.erode(original_image, kernel, iterations=edge_filter.erodeIter)
         dilated_image = cv.dilate(eroded_image, kernel, iterations=edge_filter.dilateIter)
 
-        return dilated_image
+        # canny edge detection
+        result = cv.Canny(dilated_image, edge_filter.canny1, edge_filter.canny2)
+
+        # convert single channel image back to BGR
+        img = cv.cvtColor(result, cv.COLOR_GRAY2BGR)
+
+        return img
 
     def shif_channel(self, c, amount):
         if amount > 0:
