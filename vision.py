@@ -2,6 +2,7 @@ from unittest import result
 import cv2 as cv
 import numpy as np
 from hsvfilter import HsvFilter
+from edgefilter import EdgeFilter
 
 class Vision:
     # constants
@@ -121,6 +122,17 @@ class Vision:
         cv.createTrackbar('VAdd', self.TRACKBAR_WINDOW, 0, 255, nothing)
         cv.createTrackbar('VSub', self.TRACKBAR_WINDOW, 0, 255, nothing)
 
+        # trackbars for edge creation
+        cv.createTrackbar('KernelSize', self.TRACKBAR_WINDOW, 1, 30, nothing)
+        cv.createTrackbar('ErodeIter', self.TRACKBAR_WINDOW, 1, 5, nothing)
+        cv.createTrackbar('DilateIter', self.TRACKBAR_WINDOW, 1, 5, nothing)
+        cv.createTrackbar('Canny1', self.TRACKBAR_WINDOW, 0, 200, nothing)
+        cv.createTrackbar('Canny2', self.TRACKBAR_WINDOW, 0, 500, nothing)
+        # Set default value for Canny trackbars
+        cv.setTrackbarPos('KernelSize', self.TRACKBAR_WINDOW, 5)
+        cv.setTrackbarPos('Canny1', self.TRACKBAR_WINDOW, 100)
+        cv.setTrackbarPos('Canny2', self.TRACKBAR_WINDOW, 200)
+
     def get_hsv_filter_from_controls(self):
         # Get current positions of all trackbars
         hsv_filter = HsvFilter()
@@ -135,6 +147,17 @@ class Vision:
         hsv_filter.vAdd = cv.getTrackbarPos('VAdd', self.TRACKBAR_WINDOW)
         hsv_filter.vSub = cv.getTrackbarPos('VSub', self.TRACKBAR_WINDOW)
         return hsv_filter 
+
+    # returns a Canny edge filter object based on the control GUI values
+    def get_edge_filter_from_controls(self):
+        # Get current positions of all trackbars
+        edge_filter = EdgeFilter()
+        edge_filter.kernelSize = cv.getTrackbarPos('KernelSize', self.TRACKBAR_WINDOW)
+        edge_filter.erodeIter = cv.getTrackbarPos('ErodeIter', self.TRACKBAR_WINDOW)
+        edge_filter.dilateIter = cv.getTrackbarPos('DilateIter', self.TRACKBAR_WINDOW)
+        edge_filter.canny1 = cv.getTrackbarPos('Canny1', self.TRACKBAR_WINDOW)
+        edge_filter.canny2 = cv.getTrackbarPos('Canny2', self.TRACKBAR_WINDOW)
+        return edge_filter
 
     # given an image and HSV filter, apply the filter and return the resulting image.
     # if a filter is not supoplied, the control GUI trackbars will be used
@@ -164,6 +187,19 @@ class Vision:
         img = cv.cvtColor(result, cv.COLOR_HSV2BGR)
 
         return img
+
+    # given an image and a Canny edge filter, apply the filter and return the resulting image.
+    # if a filter is not supplied, the control GUI trackbars will be used
+    def apply_edge_filter(self, original_image, edge_filter=None):
+        # if we haven't been given a defined filter, use the filter values from the GUI
+        if not edge_filter:
+            edge_filter = self.get_edge_filter_from_controls()
+
+        kernel = np.ones((edge_filter.kernelSize, edge_filter.kernelSize), np.uint8)
+        eroded_image = cv.erode(original_image, kernel, iterations=edge_filter.erodeIter)
+        dilated_image = cv.dilate(eroded_image, kernel, iterations=edge_filter.dilateIter)
+
+        return dilated_image
 
     def shif_channel(self, c, amount):
         if amount > 0:

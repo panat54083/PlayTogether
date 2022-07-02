@@ -8,8 +8,10 @@ import time
 from windowcapture import WindowCapture
 from vision import Vision
 from hsvfilter import HsvFilter
-window_name = "ApowerMirror Livestream"
-# window_name = None
+from edgefilter import EdgeFilter
+
+# window_name = "ApowerMirror Livestream"
+window_name = None
 wincap = WindowCapture(window_name)
 
 vision_exclamation = Vision('picture/process_egg.jpg')
@@ -24,16 +26,19 @@ while(True):
     # screenshot = np.array(screenshot)
     # # Convert RGB to BGR 
     # pre-process the image
-    hsvfilter = HsvFilter(18, 0, 255, 58, 46, 255, 0, 0, 0, 0)
-    pre_process_img = vision_exclamation.apply_hsv_filter(screenshot, hsvfilter)
+    # hsvfilter = HsvFilter(18, 0, 255, 58, 46, 255, 0, 0, 0, 0)
+    pre_process_img = vision_exclamation.apply_hsv_filter(screenshot)
+
+    edge_process_img = vision_exclamation.apply_edge_filter(screenshot)
     # screenshot = cv.cvtColor(screenshot, cv.COLOR_RGBA2GRAY)
     # do object detection
-    rectangles = vision_exclamation.find(pre_process_img, 0.45)
+    # rectangles = vision_exclamation.find(pre_process_img, 0.45)
 
-    output_img = vision_exclamation.draw_rectangles(screenshot, rectangles)
+    # output_img = vision_exclamation.draw_rectangles(screenshot, rectangles)
 
     # display the processed image
-    cv.imshow('Computer Vision', output_img)
+    cv.imshow('HSV filter', pre_process_img)
+    cv.imshow('Edge filter', edge_process_img)
     # cv.imshow('Computer Vision', screenshot)
 
     print("FPS {}".format(1 / (time.time() - loop_time)))
