@@ -10,34 +10,37 @@ from vision import Vision
 from hsvfilter import HsvFilter
 from edgefilter import EdgeFilter
 
-# window_name = "ApowerMirror Livestream"
-window_name = None
+window_name = "ApowerMirror Livestream"
+# window_name = None
 wincap = WindowCapture(window_name)
 
-vision_exclamation = Vision('picture/process_egg.jpg')
+vision_exclamation = Vision('picture/edge exclam.jpg')
 # vision_exclamation = Vision('picture/IMG_1545.jpg')    
 vision_exclamation.init_control_gui()
 loop_time = time.time()
 while(True):
 
     screenshot = wincap.get_screenshot()
-    # # we need to do this if we use 3rd party way to capture window screenshot
-    # # we need to convert screenshot format to input that open cv understand.
-    # screenshot = np.array(screenshot)
-    # # Convert RGB to BGR 
+    # crop screen shot for detecting only exclamation point
+    crop_screenshot = screenshot
+    x, w, y, h = [550, 400, 100, 200]
+    # screenshot = crop_screenshot[y:y+h, x:x+w]
+
     # pre-process the image
     # hsvfilter = HsvFilter(18, 0, 255, 58, 46, 255, 0, 0, 0, 0)
-    pre_process_img = vision_exclamation.apply_hsv_filter(screenshot)
+    edgefilter = EdgeFilter(8, 1, 1, 100, 200)
+    # pre_process_img = vision_exclamation.apply_hsv_filter(screenshot)
 
-    edge_process_img = vision_exclamation.apply_edge_filter(screenshot)
+    edge_process_img = vision_exclamation.apply_edge_filter(screenshot, None)
     # screenshot = cv.cvtColor(screenshot, cv.COLOR_RGBA2GRAY)
     # do object detection
-    # rectangles = vision_exclamation.find(pre_process_img, 0.45)
+    rectangles = vision_exclamation.find(edge_process_img, 0.50)
 
-    # output_img = vision_exclamation.draw_rectangles(screenshot, rectangles)
+    output_img = vision_exclamation.draw_rectangles(edge_process_img, rectangles)
+
 
     # display the processed image
-    cv.imshow('HSV filter', pre_process_img)
+    # cv.imshow('HSV filter', pre_process_img)
     cv.imshow('Edge filter', edge_process_img)
     # cv.imshow('Computer Vision', screenshot)
 
