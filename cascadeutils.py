@@ -6,4 +6,14 @@ def generate_negative_description_file():
         # loop over all the filenames
         for filename in os.listdir('negative'):
             f.write('negative/' + filename + '\n')
-    
+#  positive images
+# D:\Programing\opencv-3.4.11\opencv\build\x64\vc15\bin
+if "__main__" == __name__:
+    generate_negative_description_file()
+
+
+# D:/Programing/opencv-3.4.11/opencv/build/x64/vc15/bin/opencv_annotation.exe --annotations=pos.txt --images=positive/
+# D:/Programing/opencv-3.4.11/opencv/build/x64/vc15/bin/opencv_createsamples.exe -info pos.txt -w 24 -h 24 -num 1000 -vec pos.vec
+# press "c" to conferm
+# press "d" to undo
+# press "esc" to exit
