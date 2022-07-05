@@ -220,5 +220,51 @@ class Vision:
 
         return c
 
+    def match_keypoints(self, original_image, patch_size=32):
+        min_match_count = 5
+
+        orb = cv.ORB_create(edgeThreshold=0, patchSize=patch_size)
+        keypoints_needle, descriptors_needle = orb.detectAndCompute(self.needle_img, None)
+        orb2 = cv.ORB_create(edgeThreshold=0, patchSize=patch_size, nfeatures=2000)
+        keypoints_haystack, descriptors_haystack = orb2.detectAndCompute(original_image, None)
+
+        FLANN_INDEX_LSH = 6
+        index_params = dict(algorithm=FLANN_INDEX_LSH, 
+                table_number=6,
+                key_size=12,    
+                multi_probe_level=1)
+
+        search_params = dict(checks=50)
+
+        try:
+            flann = cv.FlannBasedMatcher(index_params, search_params)
+            matches = flann.knnMatch(descriptors_needle, descriptors_haystack, k=2)
+        except cv.error:
+            return None, None, [], [], None
+
+        # store all the good matches as per Lowe's ratio test.
+        good = []
+        points = []
+
+        for pair in matches:
+            if len(pair) == 2:
+                if pair[0].distance < 0.7*pair[1].distance:
+                    good.append(pair[0])
+
+        if len(good) > min_match_count:
+            print('match %03d, kp %03d' % (len(good), len(keypoints_needle)))
+            for match in good:
+                points.append(keypoints_haystack[match.trainIdx].pt)
+            #print(points)
+        
+        return keypoints_needle, keypoints_haystack, good, points
+
+    def centeroid(self, point_list):
+        point_list = np.asarray(point_list, dtype=np.int32)
+        length = point_list.shape[0]
+        sum_x = np.sum(point_list[:, 0])
+        sum_y = np.sum(point_list[:, 1])
+        return [np.floor_divide(sum_x, length), np.floor_divide(sum_y, length)]
+        
 if "__main__" == __name__:
     pass

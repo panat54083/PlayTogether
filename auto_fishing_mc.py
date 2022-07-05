@@ -11,11 +11,16 @@ window_name = "ApowerMirror Livestream"
 # window_name = None
 wincap = WindowCapture(window_name)
 
+# load the trained model
+cascade_exclamation = cv.CascadeClassifier('cascade/cascade.xml')
+
 loop_time = time.time()
 while(True):
 
     screenshot = wincap.get_screenshot()
     
+    # do object detection
+    rectangles = cascade_exclamation.detectMultiScale(screenshot)
     cv.imshow('Computer Vision', screenshot)
 
     print("FPS {}".format(1 / (time.time() - loop_time)))
