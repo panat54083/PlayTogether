@@ -16,14 +16,15 @@ class Vision:
     # constructor
     def __init__(self, taget_img_path, method = cv.TM_CCOEFF_NORMED):
 
-        # imread Methods
-        # https://docs.opencv.org/4.2.0/d4/da8/group__imgcodecs.html#ga61d9b0126a3e57d9277ac48327799c80
-        # self.target_img = cv.imread(taget_img_path, cv.IMREAD_GRAYSCALE)
-        self.target_img = cv.imread(taget_img_path, cv.IMREAD_UNCHANGED)
-        # print(self.target_img.dtype)
-        self.tg_w = self.target_img.shape[1]
-        self.tg_h = self.target_img.shape[0]
-        
+        if taget_img_path:
+            # imread Methods
+            # https://docs.opencv.org/4.2.0/d4/da8/group__imgcodecs.html#ga61d9b0126a3e57d9277ac48327799c80
+            # self.target_img = cv.imread(taget_img_path, cv.IMREAD_GRAYSCALE)
+            self.target_img = cv.imread(taget_img_path, cv.IMREAD_UNCHANGED)
+            # print(self.target_img.dtype)
+            self.tg_w = self.target_img.shape[1]
+            self.tg_h = self.target_img.shape[0]
+
         # there are 6 methods to choose from:
         # TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED
         self.method = method
@@ -265,6 +266,6 @@ class Vision:
         sum_x = np.sum(point_list[:, 0])
         sum_y = np.sum(point_list[:, 1])
         return [np.floor_divide(sum_x, length), np.floor_divide(sum_y, length)]
-        
+
 if "__main__" == __name__:
     pass

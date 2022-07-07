@@ -29,7 +29,7 @@ while(True):
     # pre-process the image
     # hsvfilter = HsvFilter(18, 0, 255, 58, 46, 255, 0, 0, 0, 0)
     edgefilter = EdgeFilter(8, 1, 1, 100, 200)
-    # pre_process_img = vision_exclamation.apply_hsv_filter(screenshot)
+    pre_process_img = vision_exclamation.apply_hsv_filter(screenshot)
 
     edge_process_img = vision_exclamation.apply_edge_filter(screenshot, None)
     # screenshot = cv.cvtColor(screenshot, cv.COLOR_RGBA2GRAY)
