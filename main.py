@@ -60,7 +60,8 @@ while(True):
         
         pyautogui.click(x= x_point+x_win+1000, y=y_point+y_win+500)
         time.sleep(1)
-
+        pyautogui.click(x= 1494, y=635)
+        
     print("FPS {}".format(1 / (time.time() - loop_time)))
     loop_time = time.time()
 
