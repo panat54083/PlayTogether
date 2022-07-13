@@ -7,15 +7,15 @@ from windowcapture import WindowCapture
 from vision import Vision
 from edgefilter import EdgeFilter 
 import pyautogui
-window_name = "ApowerMirror Livestream"
+window_name = "LDPlayer"
 # window_name = None
 wincap = WindowCapture(window_name)
 win_auto = pyautogui.getWindowsWithTitle(window_name)[0]
 x_win = win_auto.topleft[0]
 y_win = win_auto.topleft[1]
 
-vision_exclamation = Vision('picture/edge exclam.jpg')
-vision_take = Vision('picture/take.jpg')
+vision_exclamation = Vision('picture/edge exclamLD.jpg')
+vision_take = Vision('picture/takeLD.jpg')
 
 vision_exclamation.init_control_gui()
 loop_time = time.time()
@@ -23,7 +23,9 @@ while(True):
 
     screenshot = wincap.get_screenshot()
     # crop screen shot for detecting only exclamation point
-    x, w, y, h = [650, 300, 100, 200]
+    # x, w, y, h = [650, 300, 100, 200]
+    #LDplayer
+    x, w, y, h = [650, 300, 200, 200]
     crop_screenshot1 = screenshot[y:y+h, x:x+w]
     # do object detection
     edgefilter = EdgeFilter(8, 1, 1, 100, 200)
@@ -32,7 +34,9 @@ while(True):
     output_img = vision_exclamation.draw_rectangles(edge_process_img, exclamation_rectangles)
 
     # take detector and poistion
-    x, w, y, h = [1000, 500, 500, 100]
+    # x, w, y, h = [1000, 500, 500, 100]
+    #LDplayer
+    x, w, y, h = [1000, 500, 685, 100]
     crop_screenshot2 = screenshot[y:y+h, x:x+w]
 
     take_rectangles = vision_take.find(crop_screenshot2, 0.5)
@@ -47,7 +51,8 @@ while(True):
         # to click
         # targets = pyautogui.move(1495,631)
         # target = wincap.get_screen_position(targets[0])
-        pyautogui.click(x=1550, y=751)
+        # pyautogui.click(x=1550, y=751)
+        pyautogui.click(x=x_win+1000+400, y=y_win+685)
         # time.sleep(1.5)
         # pyautogui.click(x=1482, y=751)
     if len(take_rectangles) > 0:
@@ -58,7 +63,9 @@ while(True):
         y_point = points[0][1]
 
         
-        pyautogui.click(x= x_point+x_win+1000, y=y_point+y_win+500)
+        # pyautogui.moveTo(x= x_point+x_win+1000, y=y_point+y_win+500)
+        # LDPlayer
+        pyautogui.click(x= x_point+x_win+1000, y=y_point+y_win+685)
         time.sleep(1)
         pyautogui.click(x= 1494, y=635)
         
