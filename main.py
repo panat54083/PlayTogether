@@ -7,6 +7,7 @@ from windowcapture import WindowCapture
 from vision import Vision
 from edgefilter import EdgeFilter 
 import pyautogui
+import random
 window_name = "LDPlayer"
 # window_name = None
 wincap = WindowCapture(window_name)
@@ -65,6 +66,7 @@ while(True):
         
         # pyautogui.moveTo(x= x_point+x_win+1000, y=y_point+y_win+500)
         # LDPlayer
+        time.sleep(random.randrange(0,50,1)/10)
         pyautogui.click(x= x_point+x_win+1000, y=y_point+y_win+685)
         time.sleep(1)
         pyautogui.click(x= 1494, y=635)
